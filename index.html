@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>frontend-use-docker-env</title>
+
+  <script>
+    const req = new XMLHttpRequest();
+    req.open('GET', document.location.href, false);
+    req.send(null);
+    const respHeader = req.getAllResponseHeaders();
+    if (respHeader) {
+      const splitedHeader = respHeader.split('\r\n');
+      const headers = splitedHeader.reduce((config, cur) => {
+        const [key, value] = cur.split(': ');
+        config[key] = value;
+        return config;
+      }, {});
+
+      window.HOHO_CONFIG = {
+        PATH_BASENAME: headers['x-hoho-baseurl'] || '%VITE_PATH_BASENAME%',
+        MY_ENV: headers['x-hoho-myenv'] || '%VITE_HOHO_MY_ENV%',
+      }
+
+      const baseUrl = window.HOHO_CONFIG.PATH_BASENAME;
+      if (baseUrl) {
+        const baseEle = document.createElement('base');
+        baseEle.setAttribute('href', baseUrl);
+        document.head.insertBefore(baseEle, document.head.firstChild);
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

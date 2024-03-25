@@ -1,0 +1,28 @@
+server {
+    listen       80;
+    server_name  localhost;
+    client_max_body_size 2048m;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm index.shtml;
+        try_files $uri $uri/ /index.html;
+
+        if ($request_filename ~* .*\.html$) {
+            add_header Cache-Control "no-cache, no-store";
+            add_header X-Hoho-Baseurl '${HOHO_BASE_URL}';
+            add_header X-Hoho-Myenv '${HOHO_MY_ENV}';
+        }
+    }
+
+    location ${HOHO_BASE_URL}/webapi/ {
+        proxy_pass ${HOHO_BACKEND_URL};
+    }
+
+    error_page  405 =200 $uri;
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
