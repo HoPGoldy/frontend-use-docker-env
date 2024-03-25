@@ -4,6 +4,12 @@
 
 ## 如何使用
 
+**安装依赖**
+
+```bash
+npm install
+```
+
 **启动 mock 后端**
 
 启动后可以直接访问 [http://localhost:3001/profile](http://localhost:3001/profile) 来查看接口响应。
